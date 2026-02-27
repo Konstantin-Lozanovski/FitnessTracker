@@ -3,9 +3,14 @@ import cors from "cors";
 import "express-async-errors";
 import { PORT } from "./config/env.js";
 import { connectDB } from "./db/db.js";
+import { swaggerSpec } from "./config/swagger.js";
+import swaggerUi from "swagger-ui-express";
 
 // Routers
 import authRouter from "./routes/auth.routes.js";
+import exerciseRouter from "./routes/exercise.routes.js";
+import workoutRouter from "./routes/workout.routes.js";
+import workoutExerciseRouter from "./routes/workoutExercise.routes.js";
 
 //Middleware
 import notFoundMiddleware from "./middleware/not-found.js";
@@ -21,13 +26,23 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
+app.use("/api/exercises", exerciseRouter);
+app.use("/api/workouts", authenticateUser, workoutRouter);
+app.use(
+  "/api/workouts/:workoutId/exercises",
+  authenticateUser,
+  workoutExerciseRouter,
+);
+
+app.get("/api/swagger.json", (req, res) => res.send(swaggerSpec));
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
 const port = PORT || 5000;
-
 const start = async () => {
   try {
     await connectDB();

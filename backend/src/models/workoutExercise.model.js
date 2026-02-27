@@ -14,21 +14,21 @@ const workoutExerciseSchema = new mongoose.Schema(
     workout: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Workout",
-      required: true,
+      required: [true, "Please provide workout ID"],
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: [true, "Please provide user ID"],
     },
     exerciseId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      required: [true, "Please provide exercise ID"],
       refPath: "exerciseModel",
     },
     exerciseModel: {
       type: String,
-      required: true,
+      required: [true, "Please provide exercise model"],
       enum: ["Exercise", "UserExercise"],
     },
     order: { type: Number }, // optional, for ordering exercises in workout

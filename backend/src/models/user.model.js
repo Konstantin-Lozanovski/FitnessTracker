@@ -15,8 +15,8 @@ const userSchema = new mongoose.Schema(
       required: [true, "Please provide username"],
       trim: true,
       unique: true,
-      minlength: 3,
-      maxlength: 50,
+      minlength: [3, "Username must be at least 3 characters long"],
+      maxlength: [50, "Username must be at most 50 characters long"],
     },
     email: {
       type: String,
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Please provide password"],
-      minlength: 6,
+      minlength: [6, "Password must be at least 6 characters long"],
     },
     goalWeight: {
       type: Number,
@@ -44,7 +44,6 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  console.log("HIYA");
 });
 
 userSchema.methods.comparePassword = async function (candidatePassword) {
@@ -53,7 +52,7 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 
 // Generate JWT method
 userSchema.methods.createJWT = function () {
-  return jwt.sign({ userId: this._id, username: this.username }, JWT_SECRET, {
+  return jwt.sign({ id: this._id, username: this.username }, JWT_SECRET, {
     expiresIn: JWT_LIFETIME,
   });
 };
