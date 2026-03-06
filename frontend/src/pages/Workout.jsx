@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { deleteExercise, deleteWorkout, fetchWorkoutById, updateWorkout, updateWorkoutExercise } from "../services/api.js";
 import { useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
+import ExerciseCard from "../components/ExerciseCard.jsx";
 
 const Workout = ({ user }) => {
   const [workout, setWorkout] = useState(null);
@@ -84,6 +85,8 @@ const Workout = ({ user }) => {
     } catch (error) {
       console.error("Error adding set:", error);
     }
+
+    if (!createdSet) return;
 
     setWorkout((prev) => {
       return {
@@ -194,71 +197,15 @@ const Workout = ({ user }) => {
         </div>
 
         {workout.exercises.map((exercise, eIdx) => (
-          <div key={exercise._id} className="exercise-card mt-4">
-            <div className="exercise-header">
-              <h5 className="m-0 fw-bold">{exercise.exerciseId.name}</h5>
-              <div className="dropdown">
-                <span className="dots-menu" data-bs-toggle="dropdown">
-                  &#8942;
-                </span>
-                <ul className="dropdown-menu dropdown-menu-dark">
-                  <li>
-                    <a className="dropdown-item text-danger" href="#" onClick={() => handleDeleteExercise(exercise._id)}>
-                      Delete Exercise
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {exercise.sets.map((set, sIdx) => (
-              <div key={set._id} className="set-row mt-3">
-                <div className="input-group-custom">
-                  <label>Weight (kg)</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={set.weight || ""}
-                    onChange={(e) => handleSetChange(eIdx, sIdx, "weight", Number(e.target.value))}
-                  />
-                </div>
-                <div className="input-group-custom">
-                  <label>Reps</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={set.reps || ""}
-                    onChange={(e) => handleSetChange(eIdx, sIdx, "reps", Number(e.target.value))}
-                  />
-                </div>
-                <div className="input-group-custom">
-                  <label>Notes</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={set.notes}
-                    onChange={(e) => handleSetChange(eIdx, sIdx, "notes", e.target.value)}
-                  />
-                </div>
-                <div className="dropdown align-self-end">
-                  <span className="dots-menu" data-bs-toggle="dropdown">
-                    &#8942;
-                  </span>
-                  <ul className="dropdown-menu dropdown-menu-dark">
-                    <li>
-                      <a className="dropdown-item text-danger" href="#">
-                        Delete Set
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            ))}
-
-            <button className="add-set-btn mt-3" onClick={() => handleAddSet(eIdx)}>
-              + Add Set
-            </button>
-          </div>
+          <ExerciseCard
+            key={exercise._id}
+            exercise={exercise}
+            eIdx={eIdx}
+            workoutId={workout._id}
+            handleSetChange={handleSetChange}
+            handleAddSet={handleAddSet}
+            handleDeleteExercise={handleDeleteExercise}
+          />
         ))}
 
         <button className="add-exercise-btn">+ Add Exercise</button>
