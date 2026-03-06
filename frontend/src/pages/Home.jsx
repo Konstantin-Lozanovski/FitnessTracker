@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createWorkout, fetchWorkouts } from "../services/api.js";
+import { createWorkout, deleteWorkout, fetchWorkouts } from "../services/api.js";
 import { Link, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 
@@ -14,7 +14,6 @@ const Home = ({ user }) => {
       try {
         const data = await fetchWorkouts();
         setWorkouts(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching workouts:", error);
       } finally {
@@ -33,6 +32,15 @@ const Home = ({ user }) => {
       navigate(`/workouts/${newWorkout._id}`);
     } catch (error) {
       console.error("Error creating workout:", error);
+    }
+  };
+
+  const handleDeleteWorkout = async (workoutId) => {
+    try {
+      await deleteWorkout(workoutId);
+      setWorkouts((prev) => prev.filter((workout) => workout._id !== workoutId));
+    } catch (error) {
+      console.error("Error deleting workout:", error);
     }
   };
 
@@ -88,7 +96,18 @@ const Home = ({ user }) => {
                   {workout.name} - {format(new Date(workout.date), "EEE dd MMM")}
                 </span>
               </Link>
-              <span className="dots-menu">&#8942;</span>
+              <div className="dropdown">
+                <span className="dots-menu" data-bs-toggle="dropdown">
+                  &#8942;
+                </span>
+                <ul className="dropdown-menu dropdown-menu-dark">
+                  <li>
+                    <button className="dropdown-item text-danger" onClick={() => handleDeleteWorkout(workout._id)}>
+                      Delete Workout
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </li>
           );
         })}

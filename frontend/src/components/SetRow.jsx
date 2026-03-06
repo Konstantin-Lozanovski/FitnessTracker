@@ -1,5 +1,4 @@
 const SetRow = ({ set, eIdx, sIdx, handleSetChange, handleDeleteSet }) => {
-  console.log(set._id);
   return (
     <div className="set-row mt-3">
       <div className="input-group-custom">

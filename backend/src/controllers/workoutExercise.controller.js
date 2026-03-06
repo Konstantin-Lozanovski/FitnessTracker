@@ -94,7 +94,7 @@ export const deleteSetFromWorkoutExercise = async (req, res) => {
   const exercise = await WorkoutExercise.findOneAndUpdate(
     { _id: id, workout: workoutId, user: userId },
     { $pull: { sets: { _id: setId } } },
-    { new: true },
+    { returnDocument: "after" },
   );
 
   if (!exercise) throw new NotFoundError("Exercise not found");

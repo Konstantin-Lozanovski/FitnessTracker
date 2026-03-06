@@ -30,7 +30,6 @@ export const fetchWorkoutById = async (id) => {
 export const updateWorkout = async (id, data) => {
   try {
     const response = await axiosInstance.patch(`/api/workouts/${id}`, data);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error);
