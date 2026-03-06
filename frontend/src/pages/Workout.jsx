@@ -15,8 +15,6 @@ const Workout = ({ user }) => {
       try {
         const data = await fetchWorkoutById(workoutId);
         setWorkout(data);
-        console.log("USEEFFECT FIRST");
-        console.log(data);
       } catch (error) {
         console.error("Error fetching workout:", error);
       } finally {
@@ -50,9 +48,6 @@ const Workout = ({ user }) => {
   };
 
   const handleSetChange = async (exerciseIndex, setIndex, field, value) => {
-    console.log("SET CHANGE");
-    console.log(value);
-
     setWorkout((prev) => ({
       ...prev,
       exercises: prev.exercises.map((ex, eIdx) =>
@@ -79,7 +74,6 @@ const Workout = ({ user }) => {
   };
 
   const handleAddSet = async (exerciseIndex) => {
-    console.log("ADD SET");
     const exerciseId = workout.exercises[exerciseIndex]._id;
     const newSet = { weight: 0, reps: 0, notes: "" };
 
