@@ -53,11 +53,17 @@ const Workout = ({ user }) => {
     console.log("SET CHANGE");
     console.log(value);
 
-    setWorkout((prev) => {
-      const newWorkout = { ...prev };
-      newWorkout.exercises[exerciseIndex].sets[setIndex][field] = value;
-      return newWorkout;
-    });
+    setWorkout((prev) => ({
+      ...prev,
+      exercises: prev.exercises.map((ex, eIdx) =>
+        eIdx === exerciseIndex
+          ? {
+              ...ex,
+              sets: ex.sets.map((set, sIdx) => (sIdx === setIndex ? { ...set, [field]: value } : set)),
+            }
+          : ex,
+      ),
+    }));
 
     const exercise = workout.exercises[exerciseIndex];
     const setId = exercise.sets[setIndex]._id;
