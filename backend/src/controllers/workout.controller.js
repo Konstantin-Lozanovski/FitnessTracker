@@ -7,7 +7,10 @@ import mongoose from "mongoose";
 export const createWorkout = async (req, res) => {
   const userId = req.user.id;
 
-  const workout = new Workout({ user: userId });
+  const now = new Date();
+  const startTime = now.toTimeString().slice(0, 5);
+
+  const workout = new Workout({ user: userId, startTime });
   await workout.save();
 
   res.status(StatusCodes.CREATED).json(workout);
