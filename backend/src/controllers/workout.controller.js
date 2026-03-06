@@ -21,6 +21,10 @@ export const updateWorkout = async (req, res) => {
     throw new BadRequestError("Invalid workout ID");
   }
 
+  if (req.body.endTime) {
+    req.body.endTime = new Date().toTimeString().slice(0, 5);
+  }
+
   const workout = await Workout.findOneAndUpdate(
     {
       _id: workoutId,
@@ -33,34 +37,6 @@ export const updateWorkout = async (req, res) => {
   if (!workout) {
     throw new NotFoundError("Workout not found");
   }
-
-  // // Then, update each exercise & its sets
-  // if (req.body.exercises && req.body.exercises.length > 0) {
-  //   for (const ex of req.body.exercises) {
-  //     await WorkoutExercise.findOneAndUpdate(
-  //       { _id: ex._id, user: userId },
-  //       { sets: ex.sets },
-  //       { runValidators: true },
-  //     );
-  //   }
-  // }
-  //
-  // // Fetch updated exercises
-  // const exercises = await WorkoutExercise.find({
-  //   workout: workoutId,
-  //   user: userId,
-  // })
-  //   .sort({ order: 1 })
-  //   .populate("exerciseId");
-  //
-  // // Attach to workout
-  // const workoutWithExercises = workout.toObject();
-  // workoutWithExercises.exercises = exercises.map((ex) => ({
-  //   _id: ex._id,
-  //   exerciseId: ex.exerciseId,
-  //   order: ex.order,
-  //   sets: ex.sets,
-  // }));
 
   res.status(StatusCodes.OK).json(workout);
 };

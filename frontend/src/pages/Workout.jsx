@@ -39,6 +39,18 @@ const Workout = ({ user }) => {
     }
   };
 
+  const handleFinishWorkout = async () => {
+    try {
+      const now = new Date();
+      const time = now.toTimeString().slice(0, 5);
+
+      await updateWorkout(workout._id, { endTime: time });
+      navigate("/");
+    } catch (error) {
+      console.error("Error finishing workout:", error);
+    }
+  };
+
   const handleDeleteWorkout = async (workoutId) => {
     try {
       await deleteWorkout(workoutId);
@@ -146,7 +158,7 @@ const Workout = ({ user }) => {
     <div className="container-main">
       {/*// <!-- Top Workout Header -->*/}
       <div className="workout-header">
-        <button className="finish-btn" onClick="finishWorkout()">
+        <button className="finish-btn" onClick={handleFinishWorkout}>
           Finish
         </button>
         <h5 className="m-0 fw-bold">{workout?.date && format(new Date(workout.date), "EEE dd MMM")}</h5>
