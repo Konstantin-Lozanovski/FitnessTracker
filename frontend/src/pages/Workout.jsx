@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { deleteExercise, deleteWorkout, fetchWorkoutById, updateWorkout, updateWorkoutExercise } from "../services/api.js";
+import { deleteExercise, deleteSet, deleteWorkout, fetchWorkoutById, updateWorkout, updateWorkoutExercise } from "../services/api.js";
 import { useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
 import ExerciseCard from "../components/ExerciseCard.jsx";
@@ -116,6 +116,29 @@ const Workout = ({ user }) => {
     }
   };
 
+  const handleDeleteSet = async (exerciseIndex, setIndex) => {
+    const exercise = workout.exercises[exerciseIndex];
+    const set = exercise.sets[setIndex];
+
+    try {
+      await deleteSet(workout._id, exercise._id, set._id);
+
+      setWorkout((prev) => ({
+        ...prev,
+        exercises: prev.exercises.map((ex, eIdx) =>
+          eIdx === exerciseIndex
+            ? {
+                ...ex,
+                sets: ex.sets.filter((_, sIdx) => sIdx !== setIndex),
+              }
+            : ex,
+        ),
+      }));
+    } catch (error) {
+      console.error("Error deleting set:", error);
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (!workout) return <p>Workout not found</p>;
 
@@ -204,6 +227,7 @@ const Workout = ({ user }) => {
             workoutId={workout._id}
             handleSetChange={handleSetChange}
             handleAddSet={handleAddSet}
+            handleDeleteSet={handleDeleteSet}
             handleDeleteExercise={handleDeleteExercise}
           />
         ))}

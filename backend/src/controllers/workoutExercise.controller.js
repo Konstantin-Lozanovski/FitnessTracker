@@ -78,6 +78,30 @@ export const updateWorkoutExercise = async (req, res) => {
   res.status(StatusCodes.OK).json(newSet);
 };
 
+export const deleteSetFromWorkoutExercise = async (req, res) => {
+  const userId = req.user.id;
+  const { workoutId, id, setId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(workoutId))
+    throw new BadRequestError("Invalid workout ID");
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    throw new BadRequestError("Invalid exercise ID");
+
+  if (!mongoose.Types.ObjectId.isValid(setId))
+    throw new BadRequestError("Invalid set ID");
+
+  const exercise = await WorkoutExercise.findOneAndUpdate(
+    { _id: id, workout: workoutId, user: userId },
+    { $pull: { sets: { _id: setId } } },
+    { new: true },
+  );
+
+  if (!exercise) throw new NotFoundError("Exercise not found");
+
+  res.status(StatusCodes.NO_CONTENT).send();
+};
+
 /* ============================
    Delete a workout exercise
    DELETE /api/workouts/:workoutId/exercises/:id

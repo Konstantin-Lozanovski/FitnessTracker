@@ -63,3 +63,12 @@ export const deleteExercise = async (workoutId, exerciseId) => {
     console.log(error);
   }
 };
+
+export const deleteSet = async (workoutId, exerciseId, setId) => {
+  try {
+    const response = await axiosInstance.delete(`/api/workouts/${workoutId}/exercises/${exerciseId}/sets/${setId}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

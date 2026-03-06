@@ -1,4 +1,5 @@
-const SetRow = ({ set, eIdx, sIdx, handleSetChange }) => {
+const SetRow = ({ set, eIdx, sIdx, handleSetChange, handleDeleteSet }) => {
+  console.log(set._id);
   return (
     <div className="set-row mt-3">
       <div className="input-group-custom">
@@ -24,6 +25,18 @@ const SetRow = ({ set, eIdx, sIdx, handleSetChange }) => {
       <div className="input-group-custom">
         <label>Notes</label>
         <input type="text" className="form-control" value={set.notes} onChange={(e) => handleSetChange(eIdx, sIdx, "notes", e.target.value)} />
+      </div>
+      <div className="dropdown align-self-end">
+        <span className="dots-menu" data-bs-toggle="dropdown">
+          &#8942;
+        </span>
+        <ul className="dropdown-menu dropdown-menu-dark">
+          <li>
+            <button className="dropdown-item text-danger" onClick={() => handleDeleteSet(eIdx, sIdx)}>
+              Delete Set
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
   );

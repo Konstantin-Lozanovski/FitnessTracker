@@ -1,6 +1,6 @@
 import SetRow from "./SetRow.jsx";
 
-const ExerciseCard = ({ exercise, eIdx, workoutId, handleSetChange, handleAddSet, handleDeleteExercise }) => {
+const ExerciseCard = ({ exercise, eIdx, workoutId, handleSetChange, handleAddSet, handleDeleteExercise, handleDeleteSet }) => {
   return (
     <div className="exercise-card mt-4">
       <div className="exercise-header">
@@ -22,7 +22,7 @@ const ExerciseCard = ({ exercise, eIdx, workoutId, handleSetChange, handleAddSet
       </div>
 
       {exercise.sets.map((set, sIdx) => (
-        <SetRow key={set._id} set={set} eIdx={eIdx} sIdx={sIdx} handleSetChange={handleSetChange} />
+        <SetRow key={set._id} set={set} eIdx={eIdx} sIdx={sIdx} handleSetChange={handleSetChange} handleDeleteSet={handleDeleteSet} />
       ))}
 
       <button className="add-set-btn mt-3" onClick={() => handleAddSet(eIdx)}>
