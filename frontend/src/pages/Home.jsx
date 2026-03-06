@@ -90,19 +90,33 @@ const Home = ({ user }) => {
       <ul className="workout-list">
         {workouts.map((workout) => {
           return (
-            <li key={workout._id} className="workout-item">
-              <Link to={`/workouts/${workout._id}`} className="workout-link">
-                <span>
-                  {workout.name} - {format(new Date(workout.date), "EEE dd MMM")}
-                </span>
-              </Link>
+            <li
+              key={workout._id}
+              className="workout-item"
+              onClick={(e) => {
+                if (e.target.closest(".dropdown")) return;
+                navigate(`/workouts/${workout._id}`);
+              }}
+              role="link"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === "Enter" && navigate(`/workouts/${workout._id}`)}
+            >
+              <span>
+                {workout.name} - {format(new Date(workout.date), "EEE dd MMM")}
+              </span>
               <div className="dropdown">
                 <span className="dots-menu" data-bs-toggle="dropdown">
                   &#8942;
                 </span>
                 <ul className="dropdown-menu dropdown-menu-dark">
                   <li>
-                    <button className="dropdown-item text-danger" onClick={() => handleDeleteWorkout(workout._id)}>
+                    <button
+                      className="dropdown-item text-danger"
+                      onClick={(e) => {
+                        e.stopPropagation(); // prevents li click
+                        handleDeleteWorkout(workout._id);
+                      }}
+                    >
                       Delete Workout
                     </button>
                   </li>
