@@ -1,0 +1,128 @@
+.container-main {
+    flex: 1;
+    max-width: 900px;
+    margin: auto;
+    padding: 2rem 1rem;
+}
+
+/* Top Control Bar */
+.workout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1f1f1f;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+.finish-btn {
+    background: linear-gradient(90deg, #e74c3c, #d35400);
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 0.6rem 1.4rem;
+    border-radius: 40px;
+    transition: 0.3s;
+}
+
+.finish-btn:hover {
+    background: linear-gradient(90deg, #d35400, #e74c3c);
+}
+
+.dots-menu {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #e74c3c;
+}
+
+/* Form Card */
+.form-card {
+    background: #1f1f1f;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.form-card .form-control {
+    background: #2b2b2b;
+    border: 1px solid #3a3a3a;
+    color: #ffffff;
+}
+
+.form-control::placeholder {
+    color: #bbbbbb;
+    opacity: 1;
+}
+
+.form-card .form-control:focus {
+    background: #2b2b2b;
+    color: #ffffff;
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 2px rgba(231,76,60,0.3);
+}
+
+label {
+    font-weight: 600;
+}
+
+.add-exercise-btn {
+    margin-top: 2rem;
+    width: 100%;
+    background: transparent;
+    border: 2px dashed #e74c3c;
+    color: #e74c3c;
+    padding: 1rem;
+    font-weight: 700;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.add-exercise-btn:hover {
+    background: #e74c3c;
+    color: white;
+}
+
+/*    Exercise styles*/
+.exercise-card {
+    background: #242424;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.exercise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.set-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr auto;
+    gap: 1rem;
+    align-items: end;
+}
+
+.input-group-custom label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #dddddd;
+}
+
+.add-set-btn {
+    background: transparent;
+    border: 2px solid #e74c3c;
+    color: #e74c3c;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.add-set-btn:hover {
+    background: #e74c3c;
+    color: white;
+}

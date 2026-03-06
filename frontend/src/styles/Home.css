@@ -1,0 +1,125 @@
+
+
+
+.container-main {
+    flex: 1;
+    padding: 2rem 1rem;
+    max-width: 1000px;
+    margin: auto;
+}
+.btn-create {
+    background: linear-gradient(90deg, #e74c3c, #d35400);
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.3rem;
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+    transition: 0.3s;
+}
+
+.btn-create:hover {
+    background: linear-gradient(90deg, #d35400, #e74c3c);
+}
+.workout-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.workout-item {
+    background: #1f1f1f;
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.workout-item:hover {
+    transform: translateY(-3px);
+    background: #2e2e2e;
+}
+
+.workout-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    width: 100%;
+}
+
+.dots-menu {
+    font-size: 1.2rem;
+    color: #e74c3c;
+    cursor: pointer;
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto 2rem auto;
+}
+
+.carousel-wrapper {
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 1rem;
+    transition: transform 0.5s ease;
+}
+
+
+/* EXACTLY 3 cards visible */
+.stats-card {
+    height: 100%;
+    flex: 0 0 calc((100% - 2rem) / 3); /* 2 gaps of 1rem */
+    background: rgba(255,255,255,0.95);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    color: black;
+}
+
+.stats-card h5 {
+    font-weight: 600;
+}
+
+.stats-card p {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+/* Make charts behave */
+.stats-card canvas {
+    width: 100% !important;
+    height: 120px !important;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(0,0,0,0.6);
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.carousel-btn:hover {
+    background: rgba(0,0,0,0.8);
+}
+
+.carousel-btn.left { left: -25px; }
+.carousel-btn.right { right: -25px; }

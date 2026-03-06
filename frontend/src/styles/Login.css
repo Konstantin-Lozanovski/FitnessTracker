@@ -1,0 +1,32 @@
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    padding: 2rem;
+    color: black;
+}
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(155, 89, 182, 0.25);
+}
+.btn-primary {
+    background: linear-gradient(90deg, #e74c3c, #d35400);
+    border: none;
+    transition: 0.3s;
+}
+.btn-primary:hover {
+    background: linear-gradient(90deg, #d35400, #e74c3c);
+}
+/* Make checkbox more visible */
+.form-check-input {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid #e74c3c; /* Red accent border */
+    background-color: #fff; /* Keep white inside */
+    accent-color: #e74c3c; /* For the checkmark itself */
+    cursor: pointer;
+}
+
+/* Optional: make label bold */
+.form-check-label {
+    color: #333;
+}

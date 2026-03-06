@@ -1,0 +1,24 @@
+.register-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    padding: 2rem;
+    color: black;
+}
+
+.form-control{
+    background-color: white;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(155, 89, 182, 0.25);
+}
+.btn-success {
+    background: linear-gradient(90deg, #e74c3c, #d35400);
+    border: none;
+    transition: 0.3s;
+}
+.btn-success:hover {
+    background: linear-gradient(90deg, #d35400, #e74c3c);
+
+}
