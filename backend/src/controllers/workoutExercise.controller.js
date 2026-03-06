@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import WorkoutExercise from "../models/workoutExercise.model.js";
+import Workout from "../models/workout.model.js";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 import { StatusCodes } from "http-status-codes";
 
@@ -16,6 +17,9 @@ export const addExerciseToWorkout = async (req, res) => {
     throw new BadRequestError("Invalid workout ID");
   if (!mongoose.Types.ObjectId.isValid(exerciseId))
     throw new BadRequestError("Invalid exercise ID");
+
+  const workout = await Workout.findOne({ _id: workoutId, user: userId });
+  if (!workout) throw new NotFoundError("Workout not found");
 
   const workoutExercise = await WorkoutExercise.create({
     workout: workoutId,
@@ -37,8 +41,6 @@ export const updateWorkoutExercise = async (req, res) => {
   const userId = req.user.id;
   const { workoutId, id } = req.params;
   const { set, setId, reps, weight, notes } = req.body;
-
-  console.log(req.body);
 
   if (!mongoose.Types.ObjectId.isValid(workoutId))
     throw new BadRequestError("Invalid workout ID");
@@ -71,7 +73,9 @@ export const updateWorkoutExercise = async (req, res) => {
 
   if (!exercise) throw new NotFoundError("Exercise not found");
 
-  res.status(StatusCodes.OK).json(exercise);
+  const newSet = exercise.sets[exercise.sets.length - 1];
+
+  res.status(StatusCodes.OK).json(newSet);
 };
 
 /* ============================

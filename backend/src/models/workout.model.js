@@ -10,8 +10,8 @@ const workoutSchema = new mongoose.Schema(
     name: { type: String, trim: true, default: "New Workout" },
     date: { type: Date, default: Date.now },
     bodyWeight: { type: Number },
-    startTime: { type: Date, default: Date.now },
-    endTime: { type: Date },
+    startTime: { type: String },
+    endTime: { type: String },
   },
   { timestamps: true },
 );
