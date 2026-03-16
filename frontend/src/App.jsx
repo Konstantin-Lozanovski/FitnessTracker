@@ -27,7 +27,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <Header user={user} setUser={setUser} />
+      {user && <Header user={user} setUser={setUser} />}
       <main className="flex-grow-1">
         <Routes>
           <Route
@@ -46,14 +46,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/register"
-            element={<Register user={user} setUser={setUser} />}
-          />
-          <Route
-            path="/login"
-            element={<Login user={user} setUser={setUser} />}
-          />
+          <Route path="/register" element={<Register user={user} setUser={setUser} />} />
+          <Route path="/login" element={<Login user={user} setUser={setUser} />} />
         </Routes>
       </main>
       <Footer />

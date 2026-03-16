@@ -71,3 +71,21 @@ export const deleteSet = async (workoutId, exerciseId, setId) => {
     console.log(error);
   }
 };
+
+export const fetchAllExercises = async () => {
+  try {
+    const response = await axiosInstance.get("/api/exercises");
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addExerciseToWorkout = async (workoutId, data) => {
+  try {
+    const response = await axiosInstance.post(`/api/workouts/${workoutId}/exercises`, data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

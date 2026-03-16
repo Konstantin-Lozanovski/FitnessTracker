@@ -3,10 +3,12 @@ import { deleteExercise, deleteSet, deleteWorkout, fetchWorkoutById, updateWorko
 import { useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
 import ExerciseCard from "../components/ExerciseCard.jsx";
+import AddExerciseModal from "../components/AddExerciseModal.jsx";
 
 const Workout = ({ user }) => {
   const [workout, setWorkout] = useState(null);
   const { workoutId } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -175,7 +177,6 @@ const Workout = ({ user }) => {
           </ul>
         </div>
       </div>
-
       {/*// <!-- Workout Form -->*/}
       <div className="form-card">
         <div className="mb-3">
@@ -244,8 +245,11 @@ const Workout = ({ user }) => {
           />
         ))}
 
-        <button className="add-exercise-btn">+ Add Exercise</button>
+        <button className="add-exercise-btn" onClick={() => setIsModalOpen(true)}>
+          + Add Exercise
+        </button>
       </div>
+      {isModalOpen && <AddExerciseModal workoutId={workout._id} closeModal={() => setIsModalOpen(false)} />}
     </div>
   );
 };
