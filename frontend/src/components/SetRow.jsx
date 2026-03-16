@@ -1,4 +1,4 @@
-const SetRow = ({ set, eIdx, sIdx, handleSetChange, handleDeleteSet }) => {
+const SetRow = ({ set, previousSet, eIdx, sIdx, handleSetChange, handleDeleteSet }) => {
   return (
     <div className="set-row mt-3">
       <div className="input-group-custom">
@@ -7,6 +7,7 @@ const SetRow = ({ set, eIdx, sIdx, handleSetChange, handleDeleteSet }) => {
           type="number"
           className="form-control"
           value={set.weight || ""}
+          placeholder={previousSet ? previousSet.weight : ""}
           onChange={(e) => handleSetChange(eIdx, sIdx, "weight", Number(e.target.value))}
         />
       </div>
@@ -17,13 +18,20 @@ const SetRow = ({ set, eIdx, sIdx, handleSetChange, handleDeleteSet }) => {
           type="number"
           className="form-control"
           value={set.reps || ""}
+          placeholder={previousSet ? previousSet.reps : ""}
           onChange={(e) => handleSetChange(eIdx, sIdx, "reps", Number(e.target.value))}
         />
       </div>
 
       <div className="input-group-custom">
         <label>Notes</label>
-        <input type="text" className="form-control" value={set.notes} onChange={(e) => handleSetChange(eIdx, sIdx, "notes", e.target.value)} />
+        <input
+          type="text"
+          className="form-control"
+          value={set.notes}
+          placeholder={previousSet ? previousSet.notes : ""}
+          onChange={(e) => handleSetChange(eIdx, sIdx, "notes", e.target.value)}
+        />
       </div>
       <div className="dropdown align-self-end">
         <span className="dots-menu" data-bs-toggle="dropdown">

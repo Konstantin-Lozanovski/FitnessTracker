@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createWorkout, deleteWorkout, fetchWorkouts } from "../services/api.js";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 
 const Home = ({ user }) => {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const visibleCards = 3;
+  const trackRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -44,20 +47,38 @@ const Home = ({ user }) => {
     }
   };
 
+  const moveCarousel = (direction) => {
+    const cards = trackRef.current.children;
+    const cardWidth = cards[0].offsetWidth + 16; // 16px = 1rem gap
+
+    const maxIndex = cards.length - visibleCards;
+
+    setCarouselIndex((prev) => {
+      let next = prev + direction;
+
+      if (next < 0) next = 0;
+      if (next > maxIndex) next = maxIndex;
+
+      trackRef.current.style.transform = `translateX(-${next * cardWidth}px)`;
+
+      return next;
+    });
+  };
+
   return (
     <div className="container container-main text-center">
       <h2 className="fw-bold text-white mb-4">Welcome Back, {user.username}!</h2>
 
       <div className="carousel-container position-relative mb-4">
-        {/*<button className="carousel-btn left" onClick="moveCarousel(-1)">*/}
-        {/*  &#10094;*/}
-        {/*</button>*/}
-        {/*<button className="carousel-btn right" onClick="moveCarousel(1)">*/}
-        {/*  &#10095;*/}
-        {/*</button>*/}
+        <button className="carousel-btn left" onClick={() => moveCarousel(-1)}>
+          &#10094;
+        </button>
+        <button className="carousel-btn right" onClick={() => moveCarousel(1)}>
+          &#10095;
+        </button>
 
         <div className="carousel-wrapper">
-          <div className="carousel-track">
+          <div className="carousel-track" ref={trackRef}>
             <div className="stats-card">
               <h5>Total Workouts</h5>
               <p className="fs-4 fw-bold">{workouts.length}</p>

@@ -22,7 +22,15 @@ const ExerciseCard = ({ exercise, eIdx, workoutId, handleSetChange, handleAddSet
       </div>
 
       {exercise.sets.map((set, sIdx) => (
-        <SetRow key={set._id} set={set} eIdx={eIdx} sIdx={sIdx} handleSetChange={handleSetChange} handleDeleteSet={handleDeleteSet} />
+        <SetRow
+          key={set._id}
+          set={set}
+          previousSet={exercise.previousSets?.[sIdx]}
+          eIdx={eIdx}
+          sIdx={sIdx}
+          handleSetChange={handleSetChange}
+          handleDeleteSet={handleDeleteSet}
+        />
       ))}
 
       <button className="add-set-btn mt-3" onClick={() => handleAddSet(eIdx)}>

@@ -85,16 +85,48 @@ export const getWorkoutById = async (req, res) => {
     workout: workoutId,
     user: userId,
   })
-    .sort({ order: 1 }) // optional: keep exercises in the order field
+    .sort({ order: 1 })
     .populate("exerciseId");
+
+  // -------- NEW PART --------
+
+  // Collect exercise IDs
+  const exerciseIds = exercises.map((ex) => ex.exerciseId._id);
+
+  // Fetch previous exercises (excluding this workout)
+  const previousExercises = await WorkoutExercise.find({
+    user: userId,
+    exerciseId: { $in: exerciseIds },
+    workout: { $ne: workoutId },
+  })
+    .populate("workout")
+    .sort({ createdAt: -1 })
+    .lean();
+
+  // Map latest previous sets per exercise
+  const previousMap = {};
+
+  for (const ex of previousExercises) {
+    if (new Date(ex.workout.date) >= new Date(workout.date)) continue;
+
+    const id = ex.exerciseId.toString();
+
+    if (!previousMap[id]) {
+      previousMap[id] = ex.sets;
+    }
+  }
+
+  // -------- END NEW PART --------
 
   // Convert workout to JSON object and attach exercises
   const workoutWithExercises = workout.toObject();
+
   workoutWithExercises.exercises = exercises.map((ex) => ({
     _id: ex._id,
-    exerciseId: ex.exerciseId, // populated exercise
+    exerciseId: ex.exerciseId,
     order: ex.order,
     sets: ex.sets,
+    previousSets: previousMap[ex.exerciseId._id.toString()] || [], // <-- added
   }));
 
   res.status(StatusCodes.OK).json(workoutWithExercises);
