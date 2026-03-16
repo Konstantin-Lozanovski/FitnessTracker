@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { createWorkout, deleteWorkout, fetchWorkouts } from "../services/api.js";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import WeightChart from "../components/WeightChart.jsx";
 
 const Home = ({ user }) => {
   const [workouts, setWorkouts] = useState([]);
@@ -89,7 +90,7 @@ const Home = ({ user }) => {
             </div>
             <div className="stats-card">
               <h5>Weight Progress</h5>
-              <canvas id="weightChart" height="120"></canvas>
+              <WeightChart workouts={workouts} />
             </div>
             <div className="stats-card">
               <h5>Bench Press</h5>

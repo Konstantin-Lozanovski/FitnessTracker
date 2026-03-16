@@ -181,13 +181,7 @@ const Workout = ({ user }) => {
       <div className="form-card">
         <div className="mb-3">
           <label>Workout Name</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Leg Day"
-            value={workout.name || ""}
-            onChange={(e) => handleWorkoutChange("name", e.target.value)}
-          />
+          <input type="text" className="form-control" value={workout.name || ""} onChange={(e) => handleWorkoutChange("name", e.target.value)} />
         </div>
 
         <div className="mb-3">
@@ -195,7 +189,6 @@ const Workout = ({ user }) => {
           <input
             type="number"
             className="form-control"
-            placeholder="70"
             value={workout.bodyWeight || ""}
             onChange={(e) => handleWorkoutChange("bodyWeight", Number(e.target.value))}
           />

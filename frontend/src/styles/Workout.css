@@ -1,3 +1,17 @@
+/* Your input fields */
+
+/* Placeholder text */
+.input-group-custom input::placeholder,
+textarea::placeholder {
+    color: #999;             /* lighter gray for placeholders */
+    opacity: 0.3;              /* ensures it’s visible */
+}
+
+.form-card input::placeholder{
+    color: #999;
+    opacity: 0.3;
+}
+
 /* Top Control Bar */
 .workout-header {
     display: flex;
@@ -73,7 +87,7 @@ label {
 }
 
 .add-exercise-btn:hover {
-    background: #e74c3c;
+    background: linear-gradient(90deg, #d35400, #e74c3c);
     color: white;
 }
 
@@ -116,7 +130,7 @@ label {
 }
 
 .add-set-btn:hover {
-    background: #e74c3c;
+    background: linear-gradient(90deg, #d35400, #e74c3c);
     color: white;
 }
 /* Modal Overlay */

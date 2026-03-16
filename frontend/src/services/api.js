@@ -89,3 +89,21 @@ export const addExerciseToWorkout = async (workoutId, data) => {
     console.log(error);
   }
 };
+
+export const fetchUserProfile = async () => {
+  try {
+    const response = await axiosInstance.get("/api/users/me");
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateUserProfile = async (data) => {
+  try {
+    const response = await axiosInstance.patch("/api/users/me", data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

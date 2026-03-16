@@ -11,6 +11,7 @@ import authRouter from "./routes/auth.routes.js";
 import exerciseRouter from "./routes/exercise.routes.js";
 import workoutRouter from "./routes/workout.routes.js";
 import workoutExerciseRouter from "./routes/workoutExercise.routes.js";
+import userRouter from "./routes/user.routes.js";
 
 //Middleware
 import notFoundMiddleware from "./middleware/not-found.js";
@@ -26,6 +27,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
+app.use("/api/users", authenticateUser, userRouter);
 app.use("/api/exercises", exerciseRouter);
 app.use("/api/workouts", authenticateUser, workoutRouter);
 app.use(

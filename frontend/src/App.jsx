@@ -8,6 +8,7 @@ import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
 import Home from "./pages/Home.jsx";
 import Workout from "./pages/Workout.jsx";
+import MyProfile from "./pages/MyProfile.jsx";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -43,6 +44,14 @@ function App() {
             element={
               <ProtectedRoute user={user}>
                 <Workout user={user} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute user={user}>
+                <MyProfile user={user} />
               </ProtectedRoute>
             }
           />
