@@ -86,7 +86,7 @@ const Home = ({ user }) => {
             </div>
             <div className="stats-card">
               <h5>Weekly Workouts</h5>
-              <p className="fs-4 fw-bold">3</p>
+              <p className="fs-4 fw-bold">11</p>
             </div>
             <div className="stats-card">
               <h5>Weight Progress</h5>
