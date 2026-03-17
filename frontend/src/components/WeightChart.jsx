@@ -6,7 +6,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 const WeightChart = ({ workouts }) => {
   if (!workouts.length) return null;
 
-  const filteredWorkouts = workouts.filter((w) => w.bodyWeight !== undefined && w.bodyWeight !== null);
+  const filteredWorkouts = workouts.filter((w) => w.bodyWeight !== undefined && w.bodyWeight !== null && w.bodyWeight !== 0);
   const sortedWorkouts = filteredWorkouts.sort((a, b) => new Date(a.date) - new Date(b.date));
   const lastWorkouts = sortedWorkouts.slice(-10);
   // Labels: use dates or weekday abbreviations
