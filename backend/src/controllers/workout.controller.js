@@ -24,8 +24,11 @@ export const updateWorkout = async (req, res) => {
     throw new BadRequestError("Invalid workout ID");
   }
 
-  if (req.body.endTime) {
-    req.body.endTime = new Date().toTimeString().slice(0, 5);
+  const allowedUpdates = {};
+  if (req.body.endTime !== undefined) allowedUpdates.endTime = req.body.endTime; // user chooses the value
+  if (req.body.name !== undefined) allowedUpdates.name = req.body.name;
+  if (req.body.bodyWeight !== undefined) {
+    allowedUpdates.bodyWeight = req.body.bodyWeight;
   }
 
   const workout = await Workout.findOneAndUpdate(
@@ -33,7 +36,7 @@ export const updateWorkout = async (req, res) => {
       _id: workoutId,
       user: userId,
     },
-    req.body,
+    allowedUpdates,
     { returnDocument: "after", runValidators: true },
   );
 

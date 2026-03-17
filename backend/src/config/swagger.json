@@ -1,0 +1,1220 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Fitness Tracker API",
+    "version": "1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "email", "password"],
+                "properties": {
+                  "username": { "type": "string", "example": "johndoe" },
+                  "email": { "type": "string", "example": "johndoe@gmail.com" },
+                  "password": { "type": "string", "example": "password123" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "username": { "type": "string", "example": "johndoe" },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@gmail.com"
+                        }
+                      }
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing required fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "Please provide all fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "User already exists"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login existing user",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": { "type": "string", "example": "johndoe@gmail.com" },
+                  "password": { "type": "string", "example": "password123" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "username": { "type": "string", "example": "johndoe" },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@gmail.com"
+                        }
+                      }
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing email or password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "Please provide email and password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "Invalid credentials"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "summary": "Get current user's profile",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns current user's profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "64d1234abcd5678ef9012345"
+                    },
+                    "username": { "type": "string", "example": "johndoe" },
+                    "email": {
+                      "type": "string",
+                      "example": "johndoe@gmail.com"
+                    },
+                    "goalWeight": { "type": "number", "example": 70 }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update current user's profile",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "goalWeight": { "type": "number", "example": 75 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns updated user profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "64d1234abcd5678ef9012345"
+                    },
+                    "username": { "type": "string", "example": "johndoe" },
+                    "email": {
+                      "type": "string",
+                      "example": "johndoe@gmail.com"
+                    },
+                    "goalWeight": { "type": "number", "example": 75 }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid input)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Invalid input" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/exercises": {
+      "get": {
+        "summary": "Get all exercises",
+        "tags": ["Exercises"],
+        "responses": {
+          "200": {
+            "description": "List of all exercises",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "64d1234abcd5678ef9012345"
+                      },
+                      "name": { "type": "string", "example": "Bench Press" },
+                      "category": { "type": "string", "example": "Chest" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new exercise",
+        "tags": ["Exercises"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "category"],
+                "properties": {
+                  "name": { "type": "string", "example": "Squat" },
+                  "category": { "type": "string", "example": "Legs" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Exercise successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "64d1234abcd5678ef9012345"
+                    },
+                    "name": { "type": "string", "example": "Squat" },
+                    "category": { "type": "string", "example": "Legs" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing required fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "Please provide name and category"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workouts": {
+      "post": {
+        "summary": "Create a new workout",
+        "tags": ["Workouts"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "Workout successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "69b996ee78148ca03dba66f4"
+                    },
+                    "user": {
+                      "type": "string",
+                      "example": "699fa21e89de2ac3ad942314"
+                    },
+                    "name": { "type": "string", "example": "New Workout" },
+                    "startTime": { "type": "string", "example": "19:01" },
+                    "date": {
+                      "type": "string",
+                      "example": "2026-03-17T18:01:18.384Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all workouts for current user",
+        "tags": ["Workouts"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "List of workouts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "69b985b9458b676f67eba679"
+                      },
+                      "user": {
+                        "type": "string",
+                        "example": "699fa21e89de2ac3ad942314"
+                      },
+                      "name": { "type": "string", "example": "Chest" },
+                      "startTime": { "type": "string", "example": "17:47" },
+                      "endTime": { "type": "string", "example": "17:48" },
+                      "date": {
+                        "type": "string",
+                        "example": "2026-03-17T16:47:53.346Z"
+                      },
+                      "bodyWeight": { "type": "number", "example": 73 }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workouts/{workoutId}": {
+      "get": {
+        "summary": "Get a workout by ID with exercises",
+        "tags": ["Workouts"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "workoutId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workout object with exercises and previous sets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "69b985b9458b676f67eba679"
+                    },
+                    "user": {
+                      "type": "string",
+                      "example": "699fa21e89de2ac3ad942314"
+                    },
+                    "name": { "type": "string", "example": "Chest" },
+                    "startTime": { "type": "string", "example": "17:47" },
+                    "endTime": { "type": "string", "example": "17:48" },
+                    "date": {
+                      "type": "string",
+                      "example": "2026-03-17T16:47:53.346Z"
+                    },
+                    "bodyWeight": { "type": "number", "example": 73 },
+                    "exercises": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "69b985c1458b676f67eba68c"
+                          },
+                          "exerciseId": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "69b982dd732a2b02768e33d9"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Bench Press"
+                              },
+                              "category": {
+                                "type": "string",
+                                "example": "Chest"
+                              }
+                            }
+                          },
+                          "sets": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "type": "string",
+                                  "example": "64d1234abcd5678ef901234b"
+                                },
+                                "reps": { "type": "integer", "example": 10 },
+                                "weight": { "type": "number", "example": 40 },
+                                "notes": { "type": "string", "example": "" }
+                              }
+                            }
+                          },
+                          "previousSets": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "type": "string",
+                                  "example": "64d1234abcd5678ef901234b"
+                                },
+                                "reps": { "type": "integer", "example": 10 },
+                                "weight": { "type": "number", "example": 40 },
+                                "notes": { "type": "string", "example": "" }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid workout ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Invalid workout ID" }
+                  }
+                }
+              }
+            }
+          },
+
+          "404": {
+            "description": "Workout not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Workout not found" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a workout",
+        "tags": ["Workouts"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "workoutId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "endTime": { "type": "string", "example": "19:48" },
+                  "bodyWeight": { "type": "number", "example": 73 },
+                  "name": { "type": "string", "example": "Chest" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated workout object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "69b996ee78148ca03dba66f4"
+                    },
+                    "user": {
+                      "type": "string",
+                      "example": "699fa21e89de2ac3ad942314"
+                    },
+                    "name": { "type": "string", "example": "Chest" },
+                    "startTime": { "type": "string", "example": "19:01" },
+                    "endTime": { "type": "string", "example": "19:48" },
+                    "date": {
+                      "type": "string",
+                      "example": "2026-03-17T18:01:18.384Z"
+                    },
+                    "bodyWeight": { "type": "number", "example": 73 }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid workout ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Invalid workout ID" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workout not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Workout not found" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a workout",
+        "tags": ["Workouts"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "workoutId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Workout deleted successfully" },
+          "400": {
+            "description": "Invalid workout ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Invalid workout ID" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workout not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Workout not found" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workouts/{workoutId}/exercises": {
+      "post": {
+        "summary": "Add an exercise to a workout",
+        "tags": ["Workout Exercises"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "workoutId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["exerciseId", "order"],
+                "properties": {
+                  "exerciseId": {
+                    "type": "string",
+                    "example": "69b981f5732a2b02768e33b7"
+                  },
+                  "exerciseModel": {
+                    "type": "string",
+                    "example": "Exercise"
+                  },
+                  "order": { "type": "number", "example": 1 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Workout exercise successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "64d1234abcd5678ef9012346"
+                    },
+                    "workout": {
+                      "type": "string",
+                      "example": "64d1234abcd5678ef9012347"
+                    },
+                    "user": {
+                      "type": "string",
+                      "example": "64d1234abcd5678ef9012348"
+                    },
+                    "exerciseModel": {
+                      "type": "string",
+                      "example": "Exercise"
+                    },
+                    "order": { "type": "number", "example": 1 },
+                    "sets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "64d1234abcd5678ef9012349"
+                          },
+                          "reps": { "type": "number", "example": 0 },
+                          "weight": { "type": "number", "example": 0 },
+                          "notes": { "type": "string", "example": "" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid IDs or missing fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Invalid workout ID" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workout not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Workout not found" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workouts/{workoutId}/exercises/{workoutExerciseId}": {
+      "delete": {
+        "summary": "Delete a workout exercise",
+        "tags": ["Workout Exercises"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "workoutId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "workoutExerciseId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Workout exercise deleted successfully" },
+          "400": {
+            "description": "Invalid IDs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": {
+                      "type": "string",
+                      "example": "Invalid exercise ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Exercise not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Exercise not found" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workouts/{workoutId}/exercises/{workoutExerciseId}/sets": {
+      "post": {
+        "summary": "Add a new set to a workout exercise",
+        "tags": ["Workout Exercises"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "workoutId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "workoutExerciseId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New set added to workout exercise",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "64d1234abcd5678ef9012349"
+                    },
+                    "reps": { "type": "number", "example": 0 },
+                    "weight": { "type": "number", "example": 0 },
+                    "notes": { "type": "string", "example": "" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid IDs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Invalid workout ID" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workout exercise not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Exercise not found" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workouts/{workoutId}/exercises/{workoutExerciseId}/sets/{setId}": {
+      "patch": {
+        "summary": "Update a set in a workout exercise",
+        "tags": ["Workout Exercises"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "workoutId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "workoutExerciseId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "setId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reps": { "type": "number", "example": 10 },
+                  "weight": { "type": "number", "example": 40 },
+                  "notes": { "type": "string", "example": "Felt heavy" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the updated set",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "64d1234abcd5678ef9012349"
+                    },
+                    "reps": { "type": "number", "example": 10 },
+                    "weight": { "type": "number", "example": 40 },
+                    "notes": { "type": "string", "example": "Felt heavy" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid IDs or input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Invalid set ID" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workout exercise or set not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Exercise not found" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workouts/{workoutId}/exercises/{workoutExerciseId}/set/{setId}": {
+      "delete": {
+        "summary": "Delete a set from a workout exercise",
+        "tags": ["Workout Exercises"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "workoutId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "workoutExerciseId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "setId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Set deleted successfully" },
+          "400": {
+            "description": "Invalid IDs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Invalid set ID" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Exercise not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Exercise not found" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msg": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

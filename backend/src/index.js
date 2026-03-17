@@ -3,8 +3,8 @@ import cors from "cors";
 import "express-async-errors";
 import { PORT } from "./config/env.js";
 import { connectDB } from "./db/db.js";
-import { swaggerSpec } from "./config/swagger.js";
 import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./config/swagger.json" with { type: "json" };
 
 // Routers
 import authRouter from "./routes/auth.routes.js";
@@ -20,11 +20,13 @@ import authenticateUser from "./middleware/authentication.js";
 
 const app = express();
 
-// app.use("/api/user", authenticateUser, userRouter)
-
 //Routes
 app.use(cors());
 app.use(express.json());
+
+//Swagger
+app.get("/api/swagger.json", (req, res) => res.json(swaggerDocument));
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", authenticateUser, userRouter);
@@ -36,11 +38,6 @@ app.use(
   workoutExerciseRouter,
 );
 
-app.get("/api/swagger.json", (req, res) => res.send(swaggerSpec));
-
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-//
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 

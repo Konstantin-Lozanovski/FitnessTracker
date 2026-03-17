@@ -45,9 +45,18 @@ export const deleteWorkout = async (id) => {
   }
 };
 
-export const updateWorkoutExercise = async (workoutId, exerciseId, data) => {
+export const addSetToWorkoutExercise = async (workoutId, exerciseId) => {
   try {
-    const response = await axiosInstance.patch(`/api/workouts/${workoutId}/exercises/${exerciseId}`, data);
+    const response = await axiosInstance.post(`/api/workouts/${workoutId}/exercises/${exerciseId}/sets`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateSetInWorkoutExercise = async (workoutId, exerciseId, setId, data) => {
+  try {
+    const response = await axiosInstance.patch(`/api/workouts/${workoutId}/exercises/${exerciseId}/sets/${setId}`, data);
     return response.data;
   } catch (error) {
     console.log(error);

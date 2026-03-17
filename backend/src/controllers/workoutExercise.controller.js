@@ -32,44 +32,26 @@ export const addExerciseToWorkout = async (req, res) => {
 
   res.status(StatusCodes.CREATED).json(workoutExercise);
 };
-
 /* ============================
-   Update a workout exercise
-   PATCH /api/workouts/:workoutId/exercises/:id
+   Add set to workout exercise
+   POST /api/workouts/:workoutId/exercises/:workoutExerciseId/sets
 ============================ */
-export const updateWorkoutExercise = async (req, res) => {
+export const addSetToWorkoutExercise = async (req, res) => {
   const userId = req.user.id;
-  const { workoutId, id } = req.params;
-  const { set, setId, reps, weight, notes } = req.body;
+  const { workoutId, workoutExerciseId } = req.params;
+
+  const set = { weight: 0, reps: 0, notes: "" };
 
   if (!mongoose.Types.ObjectId.isValid(workoutId))
     throw new BadRequestError("Invalid workout ID");
-  if (!mongoose.Types.ObjectId.isValid(id))
+  if (!mongoose.Types.ObjectId.isValid(workoutExerciseId))
     throw new BadRequestError("Invalid exercise ID");
 
-  let exercise;
-
-  if (set) {
-    exercise = await WorkoutExercise.findOneAndUpdate(
-      { _id: id, workout: workoutId, user: userId },
-      { $push: { sets: set } },
-      { returnDocument: "after", runValidators: true },
-    );
-  }
-
-  if (setId) {
-    // Only update fields that are defined
-    const updateFields = {};
-    if (reps !== undefined) updateFields["sets.$.reps"] = reps;
-    if (weight !== undefined) updateFields["sets.$.weight"] = weight;
-    if (notes !== undefined) updateFields["sets.$.notes"] = notes;
-
-    exercise = await WorkoutExercise.findOneAndUpdate(
-      { _id: id, workout: workoutId, user: userId, "sets._id": setId }, // match the set by _id
-      { $set: updateFields },
-      { returnDocument: "after", runValidators: true },
-    );
-  }
+  const exercise = await WorkoutExercise.findOneAndUpdate(
+    { _id: workoutExerciseId, workout: workoutId, user: userId },
+    { $push: { sets: set } },
+    { returnDocument: "after", runValidators: true },
+  );
 
   if (!exercise) throw new NotFoundError("Exercise not found");
 
@@ -77,22 +59,68 @@ export const updateWorkoutExercise = async (req, res) => {
 
   res.status(StatusCodes.OK).json(newSet);
 };
+/* ============================
+   Update a set in a workout exercise
+   PATCH /api/workouts/:workoutId/exercises/:workoutExerciseId/set/:setId
+============================ */
+export const updateSetInWorkoutExercise = async (req, res) => {
+  const userId = req.user.id;
+  const { workoutId, workoutExerciseId, setId } = req.params;
+  const { reps, weight, notes } = req.body;
 
+  if (!mongoose.Types.ObjectId.isValid(workoutId)) {
+    throw new BadRequestError("Invalid workout ID");
+  }
+  if (!mongoose.Types.ObjectId.isValid(workoutExerciseId)) {
+    throw new BadRequestError("Invalid exercise ID");
+  }
+  if (!mongoose.Types.ObjectId.isValid(setId)) {
+    throw new BadRequestError("Invalid set ID");
+  }
+
+  // Only update fields that are defined
+  const updateFields = {};
+  if (reps !== undefined) updateFields["sets.$.reps"] = reps;
+  if (weight !== undefined) updateFields["sets.$.weight"] = weight;
+  if (notes !== undefined) updateFields["sets.$.notes"] = notes;
+
+  const exercise = await WorkoutExercise.findOneAndUpdate(
+    {
+      _id: workoutExerciseId,
+      workout: workoutId,
+      user: userId,
+      "sets._id": setId,
+    }, // match the set by _id
+    { $set: updateFields },
+    { returnDocument: "after", runValidators: true },
+  );
+
+  if (!exercise) throw new NotFoundError("Exercise not found");
+
+  const updatedSet = exercise.sets.find((s) => s._id.toString() === setId);
+
+  res.status(StatusCodes.OK).json(updatedSet);
+};
+
+/* ============================
+   Delete a set from a workout exercise
+   DELETE /api/workouts/:workoutId/exercises/:workoutExerciseId/set/:setId
+============================ */
 export const deleteSetFromWorkoutExercise = async (req, res) => {
   const userId = req.user.id;
-  const { workoutId, id, setId } = req.params;
+  const { workoutId, workoutExerciseId, setId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(workoutId))
     throw new BadRequestError("Invalid workout ID");
 
-  if (!mongoose.Types.ObjectId.isValid(id))
+  if (!mongoose.Types.ObjectId.isValid(workoutExerciseId))
     throw new BadRequestError("Invalid exercise ID");
 
   if (!mongoose.Types.ObjectId.isValid(setId))
     throw new BadRequestError("Invalid set ID");
 
   const exercise = await WorkoutExercise.findOneAndUpdate(
-    { _id: id, workout: workoutId, user: userId },
+    { _id: workoutExerciseId, workout: workoutId, user: userId },
     { $pull: { sets: { _id: setId } } },
     { returnDocument: "after" },
   );
@@ -104,19 +132,19 @@ export const deleteSetFromWorkoutExercise = async (req, res) => {
 
 /* ============================
    Delete a workout exercise
-   DELETE /api/workouts/:workoutId/exercises/:id
+   DELETE /api/workouts/:workoutId/exercises/:workoutExerciseId
 ============================ */
 export const deleteWorkoutExercise = async (req, res) => {
   const userId = req.user.id;
-  const { workoutId, id } = req.params;
+  const { workoutId, workoutExerciseId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(workoutId))
     throw new BadRequestError("Invalid workout ID");
-  if (!mongoose.Types.ObjectId.isValid(id))
+  if (!mongoose.Types.ObjectId.isValid(workoutExerciseId))
     throw new BadRequestError("Invalid exercise ID");
 
   const exercise = await WorkoutExercise.findOneAndDelete({
-    _id: id,
+    _id: workoutExerciseId,
     workout: workoutId,
     user: userId,
   });

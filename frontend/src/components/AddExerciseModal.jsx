@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// import { fetchExercisesByCategory, addExerciseToWorkout } from "../services/api";
 import { addExerciseToWorkout, fetchAllExercises } from "../services/api.js";
 
 const AddExerciseModal = ({ workoutId, closeModal }) => {

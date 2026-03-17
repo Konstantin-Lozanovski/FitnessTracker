@@ -1,4 +1,5 @@
 import Exercise from "../models/exercise.model.js";
+import { BadRequestError } from "../errors/index.js";
 
 export const getAllExercises = async (req, res) => {
   const exercises = await Exercise.find();
@@ -8,6 +9,10 @@ export const getAllExercises = async (req, res) => {
 
 export const createExercise = async (req, res) => {
   const { name, category } = req.body;
+
+  if (!name || !category) {
+    throw new BadRequestError("Please provide name and category");
+  }
 
   const exercise = new Exercise({ name, category });
   await exercise.save();

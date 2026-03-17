@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { deleteExercise, deleteSet, deleteWorkout, fetchWorkoutById, updateWorkout, updateWorkoutExercise } from "../services/api.js";
+import {
+  addSetToWorkoutExercise,
+  deleteExercise,
+  deleteSet,
+  deleteWorkout,
+  fetchWorkoutById,
+  updateSetInWorkoutExercise,
+  updateWorkout,
+} from "../services/api.js";
 import { useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
 import ExerciseCard from "../components/ExerciseCard.jsx";
@@ -79,8 +87,7 @@ const Workout = ({ user }) => {
     const setId = exercise.sets[setIndex]._id;
 
     try {
-      await updateWorkoutExercise(workout._id, exercise._id, {
-        setId,
+      await updateSetInWorkoutExercise(workout._id, exercise._id, setId, {
         [field]: value,
       });
     } catch (error) {
@@ -95,7 +102,7 @@ const Workout = ({ user }) => {
     let createdSet = null;
 
     try {
-      createdSet = await updateWorkoutExercise(workoutId, exerciseId, { set: newSet });
+      createdSet = await addSetToWorkoutExercise(workoutId, exerciseId);
     } catch (error) {
       console.error("Error adding set:", error);
     }
