@@ -1,8 +1,8 @@
 # Fitness Tracker
 
-A fitness tracking application with a Node.js backend, MongoDB database, and React frontend. This project is containerized using Docker for backend and database.
+🌐 **Live Demo:** https://fitness-tracker-deployment-rouge.vercel.app/
 
----
+A fitness tracking application with a Node.js backend, MongoDB database, and React frontend.
 
 ## **Prerequisites**
 
