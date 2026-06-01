@@ -17,7 +17,7 @@ A fitness tracking application with a Node.js backend, MongoDB database, and Rea
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/Konstantin-Lozanovski/FitnessTracker
+git clone https://github.com/Konstantin-Lozanovski/FitnessTracker.git
 cd FitnessTracker
 ```
 
