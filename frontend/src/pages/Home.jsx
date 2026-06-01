@@ -13,6 +13,15 @@ const Home = ({ user }) => {
 
   const navigate = useNavigate();
 
+  const weeklyWorkouts = workouts.filter((workout) => {
+    const workoutDate = new Date(workout.date);
+
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    return workoutDate >= sevenDaysAgo;
+  }).length;
+
   useEffect(() => {
     const getWorkouts = async () => {
       try {
@@ -86,7 +95,7 @@ const Home = ({ user }) => {
             </div>
             <div className="stats-card">
               <h5>Weekly Workouts</h5>
-              <p className="fs-4 fw-bold">11</p>
+              <p className="fs-4 fw-bold">{weeklyWorkouts}</p>
             </div>
             <div className="stats-card">
               <h5>Weight Progress</h5>
