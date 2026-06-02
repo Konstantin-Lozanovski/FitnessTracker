@@ -47,6 +47,20 @@ http://localhost:5173
 ```
 http://localhost:5000
 ```
+## **API Documentation**
+
+The API is documented using Swagger.
+- After starting the application, the Swagger UI is available at:
+
+```bash
+http://localhost:5000/api/docs
+```
+- The raw OpenAPI/Swagger specification can be accessed at:
+```
+http://localhost:5000/api/swagger.json
+```
+
+This documentation provides details about all available API endpoints, request parameters, and response formats.
 
 ## **Stopping the application**
 
